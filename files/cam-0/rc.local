@@ -1,0 +1,26 @@
+#!/bin/sh -e
+#
+# rc.local
+#
+# This script is executed at the end of each multiuser runlevel.
+#
+
+exec 1>/tmp/rc.local.log 2>&1
+set -x
+
+# setup physical interfaces
+ip link set eth0 up
+ip route add 192.168.0.0/24 dev eth0
+
+# setup env
+_BACKEND_ADDR=192.168.0.9
+_BACKEND_PORT=9090
+_PKT_SIZE=1450
+_BITRATE=1M
+_GOP=20
+_FRAMERATE=30
+
+# start streaming
+sudo ffmpeg -f v4l2 -video_size 1920x1080 -framerate 30 -i /dev/video0 -c:v libx264 -preset ultrafast -tune zerolatency -x264-params bframes=0 -g $_GOP -b:v $_BITRATE -r $_FRAMERATE -c:a copy -f rtp rtp://$_BACKEND_ADDR:$_BACKEND_PORT?pkt_size=$_PKT_SIZE
+
+exit 0
