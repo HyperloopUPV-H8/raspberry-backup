@@ -6,7 +6,6 @@ Backup images and files for the multiple raspberry pi that are used.
 
 - [Juan Martinez Alonso](https://www.github.com/jmaralo)
 
-
 ## Installation
 
 There are two methods to install the images to a raspberry pi:
