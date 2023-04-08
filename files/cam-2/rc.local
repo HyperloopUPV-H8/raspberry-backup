@@ -19,8 +19,11 @@ _PKT_SIZE=1450
 _BITRATE=1M
 _GOP=20
 _FRAMERATE=30
+_RTCP_PORT=9087
 
 # start streaming
-sudo ffmpeg -f v4l2 -video_size 1920x1080 -framerate 30 -i /dev/video0 -c:v libx264 -preset ultrafast -tune zerolatency -x264-params bframes=0 -g $_GOP -b:v $_BITRATE -r $_FRAMERATE -c:a copy -f rtp rtp://$_BACKEND_ADDR:$_BACKEND_PORT?pkt_size=$_PKT_SIZE
+sudo ffmpeg -f v4l2 -video_size 1920x1080 -framerate 30 -i /dev/video0 \
+    -c:v libx264 -preset ultrafast -tune zerolatency -x264-params bframes=0 -g $_GOP \
+    -b:v $_BITRATE -r $_FRAMERATE -c:a copy -f rtp rtp://$_BACKEND_ADDR:$_BACKEND_PORT?pkt_size=$_PKT_SIZE"&rtcpport="$_RTCP_PORT
 
 exit 0
