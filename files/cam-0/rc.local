@@ -16,14 +16,12 @@ ip route add 192.168.0.0/24 dev eth0
 _BACKEND_ADDR=192.168.0.9
 _BACKEND_PORT=9090
 _PKT_SIZE=1450
-_BITRATE=1M
-_GOP=20
+_BITRATE=2M
+_GOP=30
 _FRAMERATE=30
 _RTCP_PORT=9089
 
 # start streaming
-sudo ffmpeg -f v4l2 -video_size 1920x1080 -framerate 30 -i /dev/video0 \
-    -c:v libx264 -preset ultrafast -tune zerolatency -x264-params bframes=0 -g $_GOP \
-    -b:v $_BITRATE -r $_FRAMERATE -c:a copy -f rtp rtp://$_BACKEND_ADDR:$_BACKEND_PORT?pkt_size=$_PKT_SIZE"&rtcpport="$_RTCP_PORT
+sudo ffmpeg -f v4l2 -video_size 720x540 -framerate 30 -i /dev/video0 -vf scale=420x236 -c:v libx264 -aq-mode 2 -psy true -profile:v main -pix_fmt yuv420p -preset ultrafast -tune zerolatency -x264-params bframes=0 -g $_GOP -b:v $_BITRATE -maxrate $_BITRATE -bufsize $_BITRATE -r $_FRAMERATE -c:a copy -f rtp rtp://$_BACKEND_ADDR:$_BACKEND_PORT?pkt_size=$_PKT_SIZE"&rtcpport="$_RTCP_PORT
 
 exit 0

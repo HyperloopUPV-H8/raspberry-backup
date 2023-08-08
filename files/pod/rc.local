@@ -11,7 +11,7 @@ exec 1>/tmp/rc.local.log 2>&1
 set -x
 
 # enable forwarding
-echo 1 > /proc/sys/net/ipv4/ip_forward
+echo 1 >/proc/sys/net/ipv4/ip_forward
 
 # setup physical interfaces
 ip link set eth0 up
